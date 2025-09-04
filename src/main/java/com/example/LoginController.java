@@ -17,7 +17,12 @@ public class LoginController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
         if (session != null && session.getAttribute("account") != null) {
-            resp.sendRedirect(req.getContextPath() + "/waiting");
+            User user = (User) session.getAttribute("account");
+            if(user.getRoleid() == Constant.ROLE_ADMIN) {
+                resp.sendRedirect(req.getContextPath() + "/admin/home");
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/waiting");
+            }
             return;
         }
         
@@ -32,7 +37,11 @@ public class LoginController extends HttpServlet {
                     if (user != null) {
                         session = req.getSession(true);
                         session.setAttribute("account", user);
-                        resp.sendRedirect(req.getContextPath() + "/waiting");
+                        if(user.getRoleid() == Constant.ROLE_ADMIN) {
+                            resp.sendRedirect(req.getContextPath() + "/admin/home");
+                        } else {
+                            resp.sendRedirect(req.getContextPath() + "/waiting");
+                        }
                         return;
                     }
                 }
@@ -73,7 +82,13 @@ public class LoginController extends HttpServlet {
             if(isRememberMe){
                 saveRemeberMe(resp, username);
             }
-            resp.sendRedirect(req.getContextPath()+"/waiting");
+            
+            // Phân quyền theo role
+            if(user.getRoleid() == Constant.ROLE_ADMIN) {
+                resp.sendRedirect(req.getContextPath()+"/admin/home");
+            } else {
+                resp.sendRedirect(req.getContextPath()+"/waiting");
+            }
         } else {
             alertMsg = "Tài khoản hoặc mật khẩu không đúng";
             req.setAttribute("alert", alertMsg);

@@ -5,11 +5,13 @@
          http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
          
-  <display-name>Servlet Demo với JDBC</display-name>
+  <display-name>Shopping Servlet Service MVC</display-name>
   
   <!-- Trang chủ mặc định -->
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
-  
+  <session-config>
+  <tracking-mode>COOKIE</tracking-mode>
+  </session-config>
 </web-app>
