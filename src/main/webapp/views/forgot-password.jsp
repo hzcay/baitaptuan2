@@ -4,11 +4,11 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Đăng nhập</title>
+    <title>Quên mật khẩu</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .login-container {
+        .forgot-container {
             max-width: 400px;
             margin: 50px auto;
             padding: 20px;
@@ -24,13 +24,21 @@
             border-radius: 4px;
             margin-bottom: 15px;
         }
-        .login-input {
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .forgot-input {
             margin-bottom: 15px;
         }
         .form-control {
             height: 45px;
         }
-        .btn-login {
+        .btn-forgot {
             width: 100%;
             height: 45px;
             font-size: 16px;
@@ -39,49 +47,55 @@
 </head>
 <body>
     <div class="container">
-        <div class="login-container">
-            <form action="login" method="post">
-                <h2 class="text-center">Đăng nhập tài khoản</h2>
+        <div class="forgot-container">
+            <form action="forgot-password" method="post">
+                <h2 class="text-center">Đặt lại mật khẩu</h2>
                 
                 <c:if test="${alert != null}">
                     <div class="alert alert-danger">${alert}</div>
                 </c:if>
                 
-                <div class="login-input">
+                <c:if test="${success != null}">
+                    <div class="alert alert-success">${success}</div>
+                </c:if>
+                
+                <div class="forgot-input">
                     <label class="input">
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <i class="fa fa-user"></i>
                             </span>
-                            <input type="text" placeholder="Tài khoản" name="username" class="form-control" required>
+                            <input type="text" placeholder="Tên đăng nhập" name="username" class="form-control" required>
                         </div>
                     </label>
                 </div>
                 
-                <div class="login-input">
+                <div class="forgot-input">
                     <label class="input">
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <i class="fa fa-lock"></i>
                             </span>
-                            <input type="password" placeholder="Mật khẩu" name="password" class="form-control" required>
+                            <input type="password" placeholder="Mật khẩu mới" name="newPassword" class="form-control" required>
                         </div>
                     </label>
                 </div>
                 
-                <div class="login-input">
-                    <label class="checkbox">
-                        <input type="checkbox" name="remember" value="on">
-                        <span>Ghi nhớ đăng nhập</span>
+                <div class="forgot-input">
+                    <label class="input">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-lock"></i>
+                            </span>
+                            <input type="password" placeholder="Nhập lại mật khẩu mới" name="confirmPassword" class="form-control" required>
+                        </div>
                     </label>
                 </div>
                 
-                <button type="submit" class="btn btn-primary btn-login">Đăng nhập</button>
+                <button type="submit" class="btn btn-primary btn-forgot">Đặt lại mật khẩu</button>
                 
                 <div class="text-center" style="margin-top: 15px;">
-                    <a href="${pageContext.request.contextPath}/register">Chưa có tài khoản? Đăng ký ngay</a>
-                    <br><br>
-                    <a href="${pageContext.request.contextPath}/forgot-password">Quên mật khẩu?</a>
+                    <a href="${pageContext.request.contextPath}/login">Quay lại đăng nhập</a>
                 </div>
             </form>
         </div>

@@ -80,6 +80,8 @@
                 
                 <div class="text-center" style="margin-top: 15px;">
                     <a href="${pageContext.request.contextPath}/register">Chưa có tài khoản? Đăng ký ngay</a>
+                    <br><br>
+                    <a href="${pageContext.request.contextPath}/forgot-password">Quên mật khẩu?</a>
                 </div>
             </form>
         </div>

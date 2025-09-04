@@ -1,4 +1,5 @@
 com\example\UserService.class
+com\example\ForgotPasswordController.class
 com\example\LogoutController.class
 com\example\LoginController.class
 com\example\User.class

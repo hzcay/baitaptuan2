@@ -109,4 +109,20 @@ public class UserDaoImpl implements UserDao {
         }
         return duplicate;
     }
+
+    @Override
+    public boolean updatePassword(String username, String newPassword) {
+        String sql = "UPDATE [User] SET password = ? WHERE username = ?";
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, newPassword);
+            ps.setString(2, username);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
