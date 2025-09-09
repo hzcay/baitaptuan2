@@ -1,12 +1,19 @@
+com\example\controller\UserHomeController.class
+com\example\dao\impl\GenericDaoImpl.class
 com\example\entity\User.class
+com\example\controller\ManagerCategoryAddController.class
+com\example\controller\ManagerCategoryDeleteController.class
+com\example\controller\UserFilter.class
 com\example\controller\LoginController.class
 com\example\service\impl\UserServiceImpl.class
 com\example\controller\HomeController.class
 com\example\utils\Constant$Path.class
 com\example\config\DBConnection.class
+com\example\config\JPAUtil.class
 com\example\service\impl\CategoryServiceImpl.class
 com\example\controller\RegisterController.class
 com\example\dao\impl\CategoryDaoImpl.class
+com\example\controller\ManagerHomeController.class
 com\example\controller\LogoutController.class
 com\example\controller\ForgotPasswordController.class
 com\example\controller\WaitingController.class
@@ -15,6 +22,7 @@ com\example\controller\CategoryAddController.class
 com\example\controller\CategoryDeleteController.class
 com\example\dao\impl\UserDaoImpl.class
 com\example\controller\AdminHomeController.class
+com\example\dao\GenericDao.class
 com\example\dao\UserDao.class
 com\example\entity\Category.class
 com\example\controller\AdminFilter.class
@@ -22,4 +30,6 @@ com\example\controller\CategoryListController.class
 com\example\utils\Constant.class
 com\example\service\UserService.class
 com\example\service\CategoryService.class
+com\example\controller\ManagerFilter.class
 com\example\dao\CategoryDao.class
+com\example\controller\ManagerCategoryEditController.class

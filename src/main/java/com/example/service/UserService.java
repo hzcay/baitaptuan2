@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.entity.User;
+import java.util.List;
 
 public interface UserService {
     User login(String username, String password);
@@ -11,4 +12,5 @@ public interface UserService {
     boolean checkExistUsername(String username);
     boolean checkExistPhone(String phone);
     boolean resetPassword(String username, String newPassword);
+    List<User> getAll(); // ✅ Get all users
 }

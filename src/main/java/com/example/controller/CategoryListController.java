@@ -14,7 +14,7 @@ import com.example.entity.Category;
 import com.example.service.CategoryService;
 import com.example.service.impl.CategoryServiceImpl;
 
-@WebServlet("/admin/category/list")
+// @WebServlet("/admin/category/list") // ✅ Disabled - use /admin/home instead
 public class CategoryListController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private CategoryService categoryService = new CategoryServiceImpl();

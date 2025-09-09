@@ -4,8 +4,10 @@ public class Constant {
     public static final String SESSION_USERNAME = "username";
     public static final String COOKIE_REMEMBER = "username";
     
-    public static final int ROLE_ADMIN = 1;
-    public static final int ROLE_USER = 5;
+    // ✅ Fixed role system as per requirement
+    public static final int ROLE_USER = 1;      // user role
+    public static final int ROLE_MANAGER = 2;   // manager role
+    public static final int ROLE_ADMIN = 3;     // admin role
     
     public static class Path {
         public static final String REGISTER = "/views/register.jsp";

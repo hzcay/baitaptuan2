@@ -40,12 +40,15 @@ public class CategoryEditController extends HttpServlet {
         String catename = req.getParameter("catename");
         String icon = req.getParameter("icon");
 
-        Category category = new Category();
-        category.setCateid(cateid);
-        category.setCatename(catename);
-        category.setIcon(icon);
-
-        categoryService.edit(category);
-        resp.sendRedirect(req.getContextPath() + "/admin/category/list");
+        // ✅ Get existing category and update its properties
+        Category category = categoryService.get(cateid);
+        if (category != null) {
+            category.setCatename(catename);
+            if (icon != null && !icon.trim().isEmpty()) {
+                category.setIcon(icon);
+            }
+            categoryService.edit(category);
+        }
+        resp.sendRedirect(req.getContextPath() + "/admin/home");
     }
 }

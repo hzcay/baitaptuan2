@@ -1,146 +1,53 @@
 package com.example.dao.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.example.config.DBConnection;
+import com.example.config.JPAUtil;
 import com.example.dao.CategoryDao;
 import com.example.entity.Category;
 
-public class CategoryDaoImpl implements CategoryDao {
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import java.util.List;
 
+public class CategoryDaoImpl extends GenericDaoImpl<Category, Integer> implements CategoryDao {
+    
     @Override
-    public void insert(Category category) {
-        String sql = "INSERT INTO Category(cate_name, icons) VALUES (?,?)";
-        try (Connection conn = new DBConnection().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, category.getCatename());
-            ps.setString(2, category.getIcon());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public Category findByName(String name) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                "SELECT c FROM Category c WHERE c.catename = :name", Category.class)
+                .setParameter("name", name)
+                .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
         }
     }
-
+    
     @Override
-    public void edit(Category category) {
-        String sql = "UPDATE Category SET cate_name = ?, icons = ? WHERE cate_id = ?";
-        try (Connection conn = new DBConnection().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, category.getCatename());
-            ps.setString(2, category.getIcon());
-            ps.setInt(3, category.getCateid());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public List<Category> findByKeyword(String keyword) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                "SELECT c FROM Category c WHERE c.catename LIKE :keyword", Category.class)
+                .setParameter("keyword", "%" + keyword + "%")
+                .getResultList();
+        } finally {
+            em.close();
         }
     }
-
+    
     @Override
-    public void delete(int id) {
-        String sql = "DELETE FROM Category WHERE cate_id = ?";
-        try (Connection conn = new DBConnection().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setInt(1, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public List<Category> findByUserId(int userId) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                "SELECT c FROM Category c WHERE c.userId = :userId", Category.class)
+                .setParameter("userId", userId)
+                .getResultList();
+        } finally {
+            em.close();
         }
-    }
-
-    @Override
-    public Category get(int id) {
-        String sql = "SELECT * FROM Category WHERE cate_id = ?";
-        try (Connection conn = new DBConnection().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            
-            if (rs.next()) {
-                Category category = new Category();
-                category.setCateid(rs.getInt("cate_id"));
-                category.setCatename(rs.getString("cate_name"));
-                category.setIcon(rs.getString("icons"));
-                return category;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public Category get(String name) {
-        String sql = "SELECT * FROM Category WHERE cate_name = ?";
-        try (Connection conn = new DBConnection().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, name);
-            ResultSet rs = ps.executeQuery();
-            
-            if (rs.next()) {
-                Category category = new Category();
-                category.setCateid(rs.getInt("cate_id"));
-                category.setCatename(rs.getString("cate_name"));
-                category.setIcon(rs.getString("icons"));
-                return category;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public List<Category> getAll() {
-        List<Category> categories = new ArrayList<>();
-        String sql = "SELECT * FROM Category";
-        try (Connection conn = new DBConnection().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ResultSet rs = ps.executeQuery();
-            
-            while (rs.next()) {
-                Category category = new Category();
-                category.setCateid(rs.getInt("cate_id"));
-                category.setCatename(rs.getString("cate_name"));
-                category.setIcon(rs.getString("icons"));
-                categories.add(category);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return categories;
-    }
-
-    @Override
-    public List<Category> search(String keyword) {
-        List<Category> categories = new ArrayList<>();
-        String sql = "SELECT * FROM Category WHERE cate_name LIKE ?";
-        try (Connection conn = new DBConnection().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, "%" + keyword + "%");
-            ResultSet rs = ps.executeQuery();
-            
-            while (rs.next()) {
-                Category category = new Category();
-                category.setCateid(rs.getInt("cate_id"));
-                category.setCatename(rs.getString("cate_name"));
-                category.setIcon(rs.getString("icons"));
-                categories.add(category);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return categories;
     }
 }

@@ -34,22 +34,37 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="icon">Icon/Ảnh đại diện:</label>
-                                    <input type="url" class="form-control" id="icon" name="icon" 
-                                           placeholder="https://picsum.photos/200/200 hoặc images/icon.png">
+                                    <label for="icon">Icon (emoji hoặc URL):</label>
+                                    <input type="text" class="form-control" id="icon" name="icon" 
+                                           placeholder="hoặc https://example.com/image.jpg">
                                     <small class="help-block">
-                                        Có thể nhập:
-                                        <br>• URL đầy đủ: https://example.com/image.jpg
-                                        <br>• Đường dẫn local: images/icon.png
-                                        <br>• Để trống nếu không có ảnh
+                                        Bạn có thể sử dụng emoji hoặc URL hình ảnh
                                     </small>
+                                </div>
+                                
+        
+                                <div class="form-group">
+                                    <label for="userId">Assign cho User:</label>
+                                    <select name="userId" id="userId" class="form-control" required>
+                                        <option value="">-- Chọn User --</option>
+                                        <c:forEach var="user" items="${users}">
+                                            <option value="${user.id}">
+                                                ${user.username} (ID: ${user.id}) - 
+                                                <c:choose>
+                                                    <c:when test="${user.roleid == 1}">User</c:when>
+                                                    <c:when test="${user.roleid == 2}">Manager</c:when>
+                                                    <c:when test="${user.roleid == 3}">Admin</c:when>
+                                                </c:choose>
+                                            </option>
+                                        </c:forEach>
+                                    </select>
                                 </div>
                                 
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="glyphicon glyphicon-plus"></i> Thêm Category
                                     </button>
-                                    <a href="${pageContext.request.contextPath}/admin/category/list" class="btn btn-default">
+                                    <a href="${pageContext.request.contextPath}/admin/home" class="btn btn-default">
                                         <i class="glyphicon glyphicon-arrow-left"></i> Quay lại
                                     </a>
                                 </div>

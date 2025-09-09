@@ -67,7 +67,7 @@
                                     <button type="submit" class="btn btn-primary">
                                         <i class="glyphicon glyphicon-save"></i> Cập nhật
                                     </button>
-                                    <a href="${pageContext.request.contextPath}/admin/category/list" class="btn btn-default">
+                                    <a href="${pageContext.request.contextPath}/admin/home" class="btn btn-default">
                                         <i class="glyphicon glyphicon-arrow-left"></i> Quay lại
                                     </a>
                                 </div>

@@ -21,6 +21,6 @@ public class CategoryDeleteController extends HttpServlet {
             throws ServletException, IOException {
         String id = req.getParameter("id");
         categoryService.delete(Integer.parseInt(id));
-        resp.sendRedirect(req.getContextPath() + "/admin/category/list");
+        resp.sendRedirect(req.getContextPath() + "/admin/home");
     }
 }

@@ -12,43 +12,48 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void insert(Category category) {
-        categoryDao.insert(category);
+        categoryDao.save(category);
     }
 
     @Override
     public void edit(Category newCategory) {
-        Category oldCategory = categoryDao.get(newCategory.getCateid());
+        Category oldCategory = categoryDao.findById(newCategory.getCateid());
         if (oldCategory != null) {
             oldCategory.setCatename(newCategory.getCatename());
             if (newCategory.getIcon() != null) {
                 oldCategory.setIcon(newCategory.getIcon());
             }
-            categoryDao.edit(oldCategory);
+            categoryDao.update(oldCategory);
         }
     }
 
     @Override
     public void delete(int id) {
-        categoryDao.delete(id);
+        categoryDao.deleteById(id);
     }
 
     @Override
     public Category get(int id) {
-        return categoryDao.get(id);
+        return categoryDao.findById(id);
     }
 
     @Override
     public Category get(String name) {
-        return categoryDao.get(name);
+        return categoryDao.findByName(name);
     }
 
     @Override
     public List<Category> getAll() {
-        return categoryDao.getAll();
+        return categoryDao.findAll();
     }
 
     @Override
     public List<Category> search(String keyword) {
-        return categoryDao.search(keyword);
+        return categoryDao.findByKeyword(keyword);
+    }
+    
+    @Override
+    public List<Category> getByUserId(int userId) {
+        return categoryDao.findByUserId(userId);
     }
 }

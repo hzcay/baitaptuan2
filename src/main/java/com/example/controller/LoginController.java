@@ -88,12 +88,8 @@ public class LoginController extends HttpServlet {
                 saveRemeberMe(resp, username);
             }
             
-            // Phân quyền theo role
-            if(user.getRoleid() == Constant.ROLE_ADMIN) {
-                resp.sendRedirect(req.getContextPath()+"/admin/home");
-            } else {
-                resp.sendRedirect(req.getContextPath()+"/waiting");
-            }
+            // ✅ Redirect theo role: 1=user, 2=manager, 3=admin
+            redirectByRole(req, resp, user);
         } else {
             alertMsg = "Tài khoản hoặc mật khẩu không đúng";
             req.setAttribute("alert", alertMsg);
@@ -105,5 +101,24 @@ public class LoginController extends HttpServlet {
         Cookie cookie = new Cookie(Constant.COOKIE_REMEMBER, username);
         cookie.setMaxAge(30*60);
         response.addCookie(cookie);
+    }
+    
+    // ✅ Redirect based on user role
+    private void redirectByRole(HttpServletRequest req, HttpServletResponse resp, User user) throws IOException {
+        String contextPath = req.getContextPath();
+        switch (user.getRoleid()) {
+            case Constant.ROLE_USER:    // 1 = user
+                resp.sendRedirect(contextPath + "/user/home");
+                break;
+            case Constant.ROLE_MANAGER: // 2 = manager  
+                resp.sendRedirect(contextPath + "/manager/home");
+                break;
+            case Constant.ROLE_ADMIN:   // 3 = admin
+                resp.sendRedirect(contextPath + "/admin/home");
+                break;
+            default:
+                resp.sendRedirect(contextPath + "/login");
+                break;
+        }
     }
 }

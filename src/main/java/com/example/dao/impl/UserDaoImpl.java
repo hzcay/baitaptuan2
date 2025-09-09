@@ -1,132 +1,111 @@
 package com.example.dao.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import com.example.config.DBConnection;
+import com.example.config.JPAUtil;
 import com.example.dao.UserDao;
 import com.example.entity.User;
 
-public class UserDaoImpl implements UserDao {
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import java.util.List;
+
+public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements UserDao {
     
     @Override
-    public User get(String username) {
-        String sql = "SELECT * FROM [User] WHERE username = ?";
-        
-        try (Connection conn = new DBConnection().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, username);
-            ResultSet rs = ps.executeQuery();
-            
-            if (rs.next()) {
-                User user = new User();
-                user.setId(rs.getInt("id"));
-                user.setEmail(rs.getString("email"));
-                user.setUserName(rs.getString("username"));
-                user.setFullName(rs.getString("fullname"));
-                user.setPassWord(rs.getString("password"));
-                user.setAvatar(rs.getString("avatar"));
-                user.setRoleid(rs.getInt("roleid"));
-                user.setPhone(rs.getString("phone"));
-                user.setCreatedDate(rs.getDate("createdDate"));
-                return user;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public User findByName(String name) {
+        // For User entity, "name" typically refers to username
+        return findByUsername(name);
     }
 
     @Override
-    public void insert(User user) {
-        String sql = "INSERT INTO [User](email, username, fullname, password, avatar, roleid, phone, createddate) VALUES (?,?,?,?,?,?,?,?)";
-        try (Connection conn = new DBConnection().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, user.getEmail());
-            ps.setString(2, user.getUserName());
-            ps.setString(3, user.getFullName());
-            ps.setString(4, user.getPassWord());
-            ps.setString(5, user.getAvatar());
-            ps.setInt(6, user.getRoleid());
-            ps.setString(7, user.getPhone());
-            ps.setDate(8, user.getCreatedDate());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public User findByUsername(String username) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            TypedQuery<User> query = em.createQuery(
+                "SELECT u FROM User u WHERE u.userName = :username", User.class);
+            query.setParameter("username", username);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
         }
     }
-
+    
     @Override
-    public boolean checkExistEmail(String email) {
-        boolean duplicate = false;
-        String query = "SELECT * FROM [User] WHERE email = ?";
-        try (Connection conn = new DBConnection().getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            
-            ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                duplicate = true;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+    public boolean existsByEmail(String email) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            Long count = em.createQuery(
+                "SELECT COUNT(u) FROM User u WHERE u.email = :email", Long.class)
+                .setParameter("email", email)
+                .getSingleResult();
+            return count > 0;
+        } finally {
+            em.close();
         }
-        return duplicate;
     }
-
+    
     @Override
-    public boolean checkExistUsername(String username) {
-        boolean duplicate = false;
-        String query = "SELECT * FROM [User] WHERE username = ?";
-        try (Connection conn = new DBConnection().getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            
-            ps.setString(1, username);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                duplicate = true;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+    public boolean existsByUsername(String username) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            Long count = em.createQuery(
+                "SELECT COUNT(u) FROM User u WHERE u.userName = :username", Long.class)
+                .setParameter("username", username)
+                .getSingleResult();
+            return count > 0;
+        } finally {
+            em.close();
         }
-        return duplicate;
     }
-
+    
     @Override
-    public boolean checkExistPhone(String phone) {
-        boolean duplicate = false;
-        String query = "SELECT * FROM [User] WHERE phone = ?";
-        try (Connection conn = new DBConnection().getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            
-            ps.setString(1, phone);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                duplicate = true;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+    public boolean existsByPhone(String phone) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            Long count = em.createQuery(
+                "SELECT COUNT(u) FROM User u WHERE u.phone = :phone", Long.class)
+                .setParameter("phone", phone)
+                .getSingleResult();
+            return count > 0;
+        } finally {
+            em.close();
         }
-        return duplicate;
     }
-
+    
     @Override
     public boolean updatePassword(String username, String newPassword) {
-        String sql = "UPDATE [User] SET password = ? WHERE username = ?";
-        try (Connection conn = new DBConnection().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, newPassword);
-            ps.setString(2, username);
-            int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            int updated = em.createQuery(
+                "UPDATE User u SET u.passWord = :password WHERE u.userName = :username")
+                .setParameter("password", newPassword)
+                .setParameter("username", username)
+                .executeUpdate();
+            tx.commit();
+            return updated > 0;
+        } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
+            throw e;
+        } finally {
+            em.close();
         }
-        return false;
+    }
+    
+    @Override
+    public List<User> findByRole(int roleId) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                "SELECT u FROM User u WHERE u.roleid = :roleId", User.class)
+                .setParameter("roleId", roleId)
+                .getResultList();
+        } finally {
+            em.close();
+        }
     }
 }

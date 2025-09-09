@@ -5,6 +5,7 @@ import com.example.dao.impl.UserDaoImpl;
 import com.example.entity.User;
 import com.example.service.UserService;
 import com.example.utils.Constant;
+import java.util.List;
 
 public class UserServiceImpl implements UserService {
     private UserDao userDao = new UserDaoImpl();
@@ -20,42 +21,47 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public User get(String username) {
-        return userDao.get(username);
+        return userDao.findByUsername(username);
     }
 
     @Override
     public void insert(User user) {
-        userDao.insert(user);
+        userDao.save(user);
     }
 
     @Override
     public boolean register(String username, String password, String email, String fullname, String phone) {
-        if (userDao.checkExistUsername(username)) {
+        if (userDao.existsByUsername(username)) {
             return false;
         }
         long millis = System.currentTimeMillis();
         java.sql.Date date = new java.sql.Date(millis);
-        userDao.insert(new User(email, username, fullname, password, null, Constant.ROLE_USER, phone, date));
+        userDao.save(new User(email, username, fullname, password, null, Constant.ROLE_USER, phone, date));
         return true;
     }
 
     @Override
     public boolean checkExistEmail(String email) {
-        return userDao.checkExistEmail(email);
+        return userDao.existsByEmail(email);
     }
 
     @Override
     public boolean checkExistUsername(String username) {
-        return userDao.checkExistUsername(username);
+        return userDao.existsByUsername(username);
     }
 
     @Override
     public boolean checkExistPhone(String phone) {
-        return userDao.checkExistPhone(phone);
+        return userDao.existsByPhone(phone);
     }
 
     @Override
     public boolean resetPassword(String username, String newPassword) {
         return userDao.updatePassword(username, newPassword);
+    }
+    
+    @Override
+    public List<User> getAll() {
+        return userDao.findAll();
     }
 }
