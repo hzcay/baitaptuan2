@@ -42,14 +42,25 @@
                                     <label for="icon">Icon/Ảnh đại diện:</label>
                                     <c:if test="${category.icon != null && category.icon != ''}">
                                         <div class="current-icon">
-                                            <strong>Icon hiện tại:</strong><br>
-                                            <img src="${pageContext.request.contextPath}/${category.icon}" 
-                                                 alt="${category.catename}" width="50" height="50" class="img-thumbnail">
+                                            <strong>Ảnh hiện tại:</strong><br>
+                                            <c:choose>
+                                                <c:when test="${category.icon.startsWith('http')}">
+                                                    <img src="${category.icon}" alt="${category.catename}" width="100" height="100" class="img-thumbnail">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img src="${pageContext.request.contextPath}/${category.icon}" alt="${category.catename}" width="100" height="100" class="img-thumbnail">
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
                                     </c:if>
-                                    <input type="text" class="form-control" id="icon" name="icon" 
-                                           value="${category.icon}" placeholder="Nhập đường dẫn icon (vd: images/icon.png)">
-                                    <small class="help-block">Để trống nếu không có icon</small>
+                                    <input type="url" class="form-control" id="icon" name="icon" 
+                                           value="${category.icon}" placeholder="https://picsum.photos/200/200 hoặc images/icon.png">
+                                    <small class="help-block">
+                                        Có thể nhập:
+                                        <br>• URL đầy đủ: https://example.com/image.jpg
+                                        <br>• Đường dẫn local: images/icon.png
+                                        <br>• Để trống nếu không có ảnh
+                                    </small>
                                 </div>
                                 
                                 <div class="form-group">

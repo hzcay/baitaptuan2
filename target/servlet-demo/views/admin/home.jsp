@@ -53,7 +53,7 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="${pageContext.request.contextPath}/admin/home">
-                    <i class="fa fa-dashboard"></i> Admin Panel
+                    <i class="fa fa-dashboard"></i> Panel
                 </a>
             </div>
             <ul class="nav navbar-nav navbar-right">

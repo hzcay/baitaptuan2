@@ -35,9 +35,14 @@
                                 
                                 <div class="form-group">
                                     <label for="icon">Icon/Ảnh đại diện:</label>
-                                    <input type="text" class="form-control" id="icon" name="icon" 
-                                           placeholder="Nhập đường dẫn icon (vd: images/icon.png)">
-                                    <small class="help-block">Để trống nếu không có icon</small>
+                                    <input type="url" class="form-control" id="icon" name="icon" 
+                                           placeholder="https://picsum.photos/200/200 hoặc images/icon.png">
+                                    <small class="help-block">
+                                        Có thể nhập:
+                                        <br>• URL đầy đủ: https://example.com/image.jpg
+                                        <br>• Đường dẫn local: images/icon.png
+                                        <br>• Để trống nếu không có ảnh
+                                    </small>
                                 </div>
                                 
                                 <div class="form-group">

@@ -48,9 +48,16 @@
                                         <td>${STT.index + 1}</td>
                                         <td>
                                             <c:if test="${category.icon != null && category.icon != ''}">
-                                                <img src="${pageContext.request.contextPath}/${category.icon}" 
-                                                     alt="${category.catename}" width="50" height="50" class="img-thumbnail">
-                                            </c:else>
+                                                <c:choose>
+                                                    <c:when test="${category.icon.startsWith('http')}">
+                                                        <img src="${category.icon}" alt="${category.catename}" width="50" height="50" class="img-thumbnail">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <img src="${pageContext.request.contextPath}/${category.icon}" alt="${category.catename}" width="50" height="50" class="img-thumbnail">
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:if>
+                                            <c:if test="${category.icon == null || category.icon == ''}">
                                                 <span class="text-muted">Không có ảnh</span>
                                             </c:if>
                                         </td>
